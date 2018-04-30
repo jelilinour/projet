@@ -1,0 +1,43 @@
+Convert shape to geoJSON:
+
+function carthoToSvg () {
+  rm -rf cartho/output/*
+  shp2json cartho/departements-20180101-shp/departements-20180101.shp -o cartho/output/departements-20180101.json
+  geoproject 'd3.geoMercator().scale(1).translate([0, 0]).scale(1960).translate([301.20837411844354, 2046.5388369824584])' < cartho/output/departements-20180101.json > cartho/output/departements-20180101-mercator.json
+  geo2svg -w 800 -h 500 < cartho/output/departements-20180101-mercator.json > cartho/output/departements-20180101-mercator.svg
+}
+
+``shp2json cartho/departements-20180101-shp/departements-20180101.shp -o cartho/output/departements-20180101.json``
+
+Apply a projection to the map
+``geoproject 'd3.geoMercator().scale(1).translate([0, 0]).scale(1960).translate([301.20837411844354, 2046.5388369824584])' < cartho/output/departements-20180101.json > cartho/output/departements-20180101-mercator.json``
+
+View projection by printing a SVG
+``geo2svg -w 800 -h 500 < cartho/output/departements-20180101-mercator.json > cartho/output/departements-20180101-mercator.svg``
+
+properties in departements
+{
+  "code_insee":"974",
+  "nom":"La Réunion",
+  "nuts3":"FR940",
+  "wikipedia":"fr:La Réunion",
+  "surf_km2":2505
+}
+
+properties in line
+{
+  "code_ligne":"977000",
+  "libelle_lig": "Ligne des Invalides Ã  Versailles-Rive-Gauche",
+  "type_ligne": "Ligne",
+  "rang_tronco" :1,
+  "pk_debut_sr":"0+000",
+  "pk_fin_sr_p":"17+611",
+  "x_debut_lam":649787,
+  "y_debut_lam":6862776,
+  "x_fin_lambe":636023,
+  "y_fin_lambe":6855929,
+  "x_debut_wgs":257767,
+  "y_debut_wgs":6251657,
+  "x_fin_wgs84":236999,
+  "y_fin_wgs84":6241038
+  }

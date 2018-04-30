@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Line chart from CSV using d3.js</title>
+    <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+    <style>
+
+	    html, body {
+		    margin: 0;
+		    padding: 0;
+		    height: 100%;
+		    width: 100%;
+        font-family: arial;
+        background-color: #e0e0e0;
+	    }
+
+	    text {
+		    font-family: arial;
+		    font-size: 16px;
+	    }
+
+
+	    path.line {
+		    fill: none;
+		    stroke: red;
+		    stroke-width: 3px;
+	    }
+
+		.axis path,
+		.axis line {
+		  fill: none;
+		  stroke: slategray;
+		  shape-rendering: crispEdges;
+		}
+    </style>
+  </head>
+  <body>
+
+	<script type="text/javascript">
+
+var parseDate = d3.timeParse("%m/%d/%Y");
+
+var margin = {left: 100, right: 50, top: 20, bottom: 50 };
+
+var width = 960 - margin.left - margin.right;
+var height = 500 - margin.top - margin.bottom;
+
+
+var max = 0;
+
+var xNudge = 150;
+var yNudge = 20;
+
+var minDate = new Date();
+var maxDate = new Date();
+
+
+
+
+d3.csv("public/total.csv")
+    .row(function(d) { return { date: parseDate(d.date), pers : Number(d.pers.trim().slice(1))}; })
+    .get(function(error, rows) {
+	    max = d3.max(rows, function(d) { return d.pers; });
+	    minDate = d3.min(rows, function(d) {return d.date; });
+		maxDate = d3.max(rows, function(d) { return d.date; });
+
+
+		var y = d3.scaleLinear()
+					.domain([0,max])
+					.range([height,0]);
+
+		var x = d3.scaleTime()
+					.domain([minDate,maxDate])
+					.range([0,width]);
+
+		var yAxis = d3.axisLeft(y);
+
+		var xAxis = d3.axisBottom(x);
+
+		var line = d3.line()
+			.x(function(d){ return x(d.date); })
+			.y(function(d){ return y(d.pers); })
+			.curve(d3.curveCardinal);
+
+
+		var svg = d3.select("body").append("svg").attr("id","svg").attr("height","100%").attr("width","100%");
+		var chartGroup = svg.append("g").attr("class","chartGroup").attr("transform","translate("+xNudge+","+yNudge+")");
+
+		chartGroup.append("path")
+			.attr("class","line")
+			.attr("d",function(d){ return line(rows); })
+
+
+		chartGroup.append("g")
+			.attr("class","axis x")
+			.attr("transform","translate(0,"+height+")")
+			.call(xAxis);
+
+		chartGroup.append("g")
+			.attr("class","axis y")
+			.call(yAxis);
+
+
+
+	});
+
+
+
+
+
+	</script>
+  <p style="text-align:center; font-size:36px">Total des partants par année</p>
+  </body>
+</html>

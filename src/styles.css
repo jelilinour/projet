@@ -1,0 +1,24 @@
+
+#content {
+  position: absolute;
+  pointer-events: none;
+}
+
+.content-container {
+  position: relative;
+}
+
+.popup-container {
+  pointer-events: none;
+  background-color: #efefef;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3),
+    0px 10px 25px 5px rgba(0, 0, 0, 0.1);
+}
+
+.popup-container text {
+  font-family: 'Helvetica', sans-serif;
+}
+
+.map {
+  fill: rgb(117, 87, 57);
+}
